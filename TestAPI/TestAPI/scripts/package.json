@@ -1,0 +1,10 @@
+{
+  "name": "scripts",
+  "scripts": {
+    "studentgen": "node studentgen.js"
+  },
+  "dependencies": {
+    "faker": "^4.1.0",
+    "mongodb": "^3.2.5"
+  }
+}

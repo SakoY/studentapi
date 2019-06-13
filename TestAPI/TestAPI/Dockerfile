@@ -1,0 +1,22 @@
+FROM mcr.microsoft.com/dotnet/core/aspnet:2.2-stretch-slim AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+
+FROM mcr.microsoft.com/dotnet/core/sdk:2.2-stretch AS build
+WORKDIR /src
+COPY ["TestAPI/TestAPI.csproj", "TestAPI/"]
+RUN dotnet restore "TestAPI/TestAPI.csproj"
+COPY . .
+WORKDIR "/src/TestAPI"
+RUN dotnet build "TestAPI.csproj" -c Release -o /app
+
+FROM build AS publish
+RUN dotnet publish "TestAPI.csproj" -c Release -o /app
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app .
+ENTRYPOINT ["dotnet", "TestAPI.dll"]
+
+
